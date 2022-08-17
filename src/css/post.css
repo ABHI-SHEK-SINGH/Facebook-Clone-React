@@ -23,3 +23,25 @@ align-items: center;
 
 
 }
+.post_middle p{
+    margin: 20px 0px;
+
+} 
+.post_middle img{
+    width: 100%;
+}
+.post_bottom{
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid lightgray;
+    margin-top: 10px;
+    padding-top:10px ;
+}
+.post_bottomOptions{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.post_bottomOptions p{
+    margin-left: 5px;
+}
