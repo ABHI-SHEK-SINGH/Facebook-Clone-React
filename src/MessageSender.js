@@ -10,7 +10,7 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 
 
 function MessageSender() {
-  const [open,setOpen] = useState(true)
+  const [open,setOpen] = useState(false)
   const handleClose=() => {
    setOpen(false)
   }

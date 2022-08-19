@@ -4,10 +4,18 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Feed from './Feed';
 import RightSidebar from './RightSidebar';
+import Login from './Login';
+import { useStateValue } from './StateProvider';
+
 
 function App() {
-  return (
-    <div className="App">
+  const [{user} , dispatch]= useStateValue();
+    return (
+    <>
+    {
+      !user ? (<Login/>):(
+
+        <div className="App">
      <Header/>
   <div className='app__body'>
     <Sidebar/>
@@ -16,6 +24,10 @@ function App() {
   </div>
 
     </div>
+      )
+    }
+    
+    </>
   );
 }
 

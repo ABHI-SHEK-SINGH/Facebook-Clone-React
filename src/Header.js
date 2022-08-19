@@ -10,10 +10,13 @@ import AppsIcon from '@mui/icons-material/Apps';
 import ForumIcon from '@mui/icons-material/Forum';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useStateValue } from './StateProvider';
 
 
 
 function Header() {
+
+  const [{user},dispatch] = useStateValue();
   return (
     <div className='header'>
     <div className='header_left'>
@@ -43,8 +46,8 @@ function Header() {
     </div>
     <div className='header_right'>
   <div className='header_info'>
-    <Avatar src='https://rukminim1.flixcart.com/image/416/416/k3hmj680/poster/t/9/p/medium-shinchan-cartoon-poster-self-adhesive-poster-wall-original-imaffg8yhsvuqgyz.jpeg?q=70'/>
-    <h5>Abhishek Singh</h5> 
+    <Avatar src={user.photoURL}/>
+    <h5>{user.displayName}</h5> 
   </div>
   <IconButton>
     <AppsIcon/>
