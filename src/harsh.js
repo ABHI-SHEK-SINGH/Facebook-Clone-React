@@ -1,11 +1,10 @@
 
 import harsh from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import 'firebase/compat/firestore'
-
-
-
+import 'firebase/compat/firestore';
 import { FacebookAuthProvider } from "firebase/auth";
+import 'firebase/storage'; 
+import "firebase/compat/storage";
 
 const firebaseConfig = harsh.initializeApp({
     apiKey: "AIzaSyCz_F8UceV7_HTvVHlVbAWA1Iz2a44nYq0",
@@ -21,4 +20,8 @@ const auth = harsh.auth();
 
 const provider = new FacebookAuthProvider();
 
-export {auth, provider}
+const db = firebaseConfig.firestore();
+
+const storageRef = harsh.storage().ref();
+
+export {auth, provider,db,storageRef}

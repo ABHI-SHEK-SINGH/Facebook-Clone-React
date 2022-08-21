@@ -1,17 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./css/feed.css"
 import MessageSender from './MessageSender'
 import Storyreel from './Storyreel'
 import Post from './Post'
+import { db } from './harsh'
 
 function Feed() {
+  
+  const [posts, setPosts] = useState([]);
+  useEffect(() =>{
+  db.collection("posts").orderBy("timestamp","desc").onSnapshot(snapshot=>{
+     setPosts(snapshot.docs.map(doc=>({
+      id:doc.id,
+      data:doc.data(),
+     })))
+  })
+  },[]);
+
+
   return (
     <div className='feed'>
     <Storyreel/>
     <MessageSender/>
-    <Post photoURL='' image="" username="Abhishek Singh" timestamp="18:30" message="This is text message"/>
+  
+    {
+      posts.map(post =>{
+        return<Post photoURL={post.data.photoURL} image={post.data.image} username={post.data.username} timestamp="18:30" message={post.data.message}/>
+
+      })
+    }
    
-    <Post photoURL='https://rukminim1.flixcart.com/image/416/416/k3hmj680/poster/t/9/p/medium-shinchan-cartoon-poster-self-adhesive-poster-wall-original-imaffg8yhsvuqgyz.jpeg?q=70' image="https://cdn.theculturetrip.com/wp-content/uploads/2017/10/himachal.jpg" username="Dummy User" timestamp="18:30" message="Hill Station"/>
+    
     
        </div>
   )

@@ -6,14 +6,48 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import "./css/messagesender.css"
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import harsh from 'firebase/compat/app';
+import { db } from './harsh';
+import {useStateValue} from './StateProvider';
 
 
 
 function MessageSender() {
+  const [{user},dispatch] = useStateValue();
   const [open,setOpen] = useState(false)
+  const [image, setImage] =useState("");
+  const[message, setMessage] =useState("");
   const handleClose=() => {
    setOpen(false)
   }
+
+const uploadFileClick=()=>{
+document.getElementById("imageFile").click();
+}
+
+const handleChange =(e)=>{
+if(e.target.files[0]){
+  setImage(e.target.files[0]);
+}
+}
+const handleUpload=(e)=>{
+  e.preventDefault();
+  if(image===""){
+   db.collection("posts").add({
+    timestamp:harsh.firestore.FieldValue.serverTimestamp(),
+    message:message,
+    username:user.displayName,
+    photoURL:user.photoURL
+   })
+  }
+  else{
+
+    
+  }
+  handleClose();
+  setMessage("");
+  setImage(null);
+}
 
   const handleOpen = () => {
     setOpen(true)
@@ -31,10 +65,15 @@ function MessageSender() {
  </div>
  <div className='modalHeader_top'>
   <Avatar/>
-  <h5>Abhishek Singh</h5>
+  <h5>{user.displayName}</h5>
  </div>
+
  <div className='modalBody'>
-  <textarea rows="5" placeholder="What's on your mind Abhishek Singh ?"></textarea>
+ 
+  <textarea rows="5" placeholder="What's on your mind Abhishek Singh ?"
+
+  onChange={e =>setMessage(e.target.value)}>
+  {message}</textarea>
  </div>
 
  <div className='modalFooter'>
@@ -43,9 +82,11 @@ function MessageSender() {
   </div>
 
   <div className='modalFooterRight'>
-    <IconButton>
+    <IconButton onClick={uploadFileClick}>
 <PhotoLibraryIcon fontSize='large' style={{color:"lightgreen"}}/>
     </IconButton>
+
+   <input type="file" id="imageFile" onChange={handleChange} style={{display:"none"}}/>
 
     <IconButton>
 <VideoCallIcon fontSize='large' style={{color:"red"}}/>
@@ -57,7 +98,7 @@ function MessageSender() {
   </div>
 
  </div>
- <input type="Summit" className='post_submit' value="Post" />
+ <input type="Summit" onClick={handleUpload} className='post_submit' value="Post" />
   </form>
  </div>
     </Modal>
