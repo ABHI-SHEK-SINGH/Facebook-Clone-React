@@ -7,8 +7,9 @@ import "./css/messagesender.css"
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import harsh from 'firebase/compat/app';
-import { db } from './harsh';
+import { db ,storageRef } from './harsh';
 import {useStateValue} from './StateProvider';
+import { ref, uploadBytes } from "firebase/storage";
 
 
 
@@ -17,6 +18,7 @@ function MessageSender() {
   const [open,setOpen] = useState(false)
   const [image, setImage] =useState("");
   const[message, setMessage] =useState("");
+  const[progress, setProgress] = useState(0);
   const handleClose=() => {
    setOpen(false)
   }
@@ -29,6 +31,7 @@ const handleChange =(e)=>{
 if(e.target.files[0]){
   setImage(e.target.files[0]);
 }
+  
 }
 const handleUpload=(e)=>{
   e.preventDefault();
@@ -41,12 +44,38 @@ const handleUpload=(e)=>{
    })
   }
   else{
+   const uploadTask = storageRef.ref(`images/${image.name}`).put(image);
 
+   uploadTask.on(
+    "state_changed",
+    (snapshot)=>{
+   const progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes)*100)
+   setProgress(progress);
+    },
+    (error)=>{
+      console.log(error);
+      alert(error.message);
+    },
+    ()=>{
+      storageRef.ref("images").child(image.name).getDownloadURL().then(url =>{
+        db.collection("posts").add({
+          timestamp:harsh.firestore.FieldValue.serverTimestamp(),
+          message:message,
+          username:user.displayName,
+          photoURL:user.photoURL,
+          image:url
+         })
+
+
+      })
+    }
+   )
     
   }
   handleClose();
   setMessage("");
   setImage(null);
+  setProgress(0);
 }
 
   const handleOpen = () => {
@@ -98,6 +127,15 @@ const handleUpload=(e)=>{
   </div>
 
  </div>
+ {image!==" " && <h2 style={{"fontSize":"15px","marginBottom":"20px","color":"lightgreen"}}>Image is added and displayed after click on post button</h2>}
+
+ {
+  progress!="" && <progress value={progress} max="100" style={{"width":"100%","marginBottom":"20px"}}/>
+ }
+
+
+
+
  <input type="Summit" onClick={handleUpload} className='post_submit' value="Post" />
   </form>
  </div>

@@ -22,6 +22,6 @@ const provider = new FacebookAuthProvider();
 
 const db = firebaseConfig.firestore();
 
-const storageRef = harsh.storage().ref();
+const storageRef = harsh.storage();
 
 export {auth, provider,db,storageRef}
